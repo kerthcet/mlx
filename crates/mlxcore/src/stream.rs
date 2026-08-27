@@ -7,6 +7,13 @@
 use mlxcore_sys as sys;
 
 /// An execution stream bound to a device.
+///
+/// Not `Send` and not `Sync`, matching [`Array`](crate::Array) — see the
+/// crate-level [threading note](crate#threading-use-one-thread). The underlying
+/// stream is an immutable (index, device) pair, so a stream on its own would be
+/// harmless to share; it stays thread-bound because its only purpose is to feed
+/// ops on arrays that are not, and because MLX's Metal backend keeps one command
+/// encoder per stream.
 pub struct Stream {
     handle: sys::mlx_stream,
 }

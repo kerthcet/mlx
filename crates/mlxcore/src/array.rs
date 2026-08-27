@@ -13,6 +13,11 @@ use crate::stream::Stream;
 /// An N-dimensional MLX array.
 ///
 /// Owns the underlying `mlx_array` handle and frees it on drop.
+///
+/// Not `Send` and not `Sync`, deliberately — see the crate-level [threading
+/// note](crate#threading-use-one-thread). The raw handle already makes it so;
+/// there is no `unsafe impl` lifting it because evaluating an array writes to
+/// the graph nodes its operands also own.
 pub struct Array {
     handle: sys::mlx_array,
 }
